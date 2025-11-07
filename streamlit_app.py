@@ -400,7 +400,61 @@ with col2:
 
 with col3:
     st.markdown("#### 🏆 Driver Statistics")
-    DriverEncoded = st.slider("Driver ID", 0, 19, 10, help="ID numerik driver (0-19)")
+    
+    # Driver ID dengan informasi nama
+    driver_names = {
+        0: "Max Verstappen (Red Bull)",
+        1: "Sergio Pérez (Red Bull)",
+        2: "Lewis Hamilton (Mercedes)",
+        3: "George Russell (Mercedes)",
+        4: "Charles Leclerc (Ferrari)",
+        5: "Carlos Sainz (Ferrari)",
+        6: "Lando Norris (McLaren)",
+        7: "Oscar Piastri (McLaren)",
+        8: "Fernando Alonso (Aston Martin)",
+        9: "Lance Stroll (Aston Martin)",
+        10: "Pierre Gasly (Alpine)",
+        11: "Esteban Ocon (Alpine)",
+        12: "Valtteri Bottas (Alfa Romeo)",
+        13: "Zhou Guanyu (Alfa Romeo)",
+        14: "Kevin Magnussen (Haas)",
+        15: "Nico Hülkenberg (Haas)",
+        16: "Yuki Tsunoda (AlphaTauri)",
+        17: "Daniel Ricciardo (AlphaTauri)",
+        18: "Alexander Albon (Williams)",
+        19: "Logan Sargeant (Williams)"
+    }
+    
+    DriverEncoded = st.slider("Driver ID", 0, 19, 10, help="Pilih ID driver (lihat daftar di bawah)")
+    
+    # Tampilkan nama driver yang dipilih
+    st.markdown(f"""
+    <div style='background: rgba(255, 0, 0, 0.2); padding: 10px; border-radius: 8px; border: 1px solid #ff0000; margin: 10px 0;'>
+        <p style='color: white; font-size: 1rem; margin: 0; text-align: center; font-weight: bold;'>
+            🏎️ <span style='color: #ff0000;'>{driver_names.get(DriverEncoded, "Unknown Driver")}</span>
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Expander untuk daftar lengkap driver
+    with st.expander("📋 Lihat Daftar Lengkap Driver ID"):
+        st.markdown("""
+        <div style='background: rgba(43, 43, 43, 0.8); padding: 15px; border-radius: 10px;'>
+        """, unsafe_allow_html=True)
+        
+        # Bagi menjadi 2 kolom
+        driver_col1, driver_col2 = st.columns(2)
+        
+        with driver_col1:
+            for i in range(0, 10):
+                st.markdown(f"**ID {i}:** {driver_names[i]}")
+        
+        with driver_col2:
+            for i in range(10, 20):
+                st.markdown(f"**ID {i}:** {driver_names[i]}")
+        
+        st.markdown("</div>", unsafe_allow_html=True)
+    
     AvgPrevPositions = st.number_input("Avg Previous Positions", value=5.0, step=0.1, format="%.1f")
     AvgPrevPoints = st.number_input("Avg Previous Points", value=15.0, step=0.1, format="%.1f")
     Year = 2025.0
