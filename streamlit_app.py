@@ -26,7 +26,7 @@ def get_base64_image(image_path):
         return None
 
 # Load background image (letakkan gambar dengan nama 'f1_background.jpg' di folder yang sama)
-bg_image_path = Path("f1_background.jpg")  # Ganti dengan nama file gambar Anda
+bg_image_path = Path("Ferrari.jpg")  # Ganti dengan nama file gambar Anda
 bg_base64 = get_base64_image(bg_image_path)
 
 # 3. Custom F1 Styles with Background
@@ -455,10 +455,34 @@ with col3:
         
         st.markdown("</div>", unsafe_allow_html=True)
     
-    AvgPrevPositions = st.number_input("Avg Previous Positions", value=5.0, step=0.1, format="%.1f")
-    AvgPrevPoints = st.number_input("Avg Previous Points", value=15.0, step=0.1, format="%.1f")
+    # Historical performance data berdasarkan Driver ID (2024 season average)
+    driver_historical_data = {
+        0: {"avg_pos": 1.5, "avg_points": 22.0},   # Verstappen
+        1: {"avg_pos": 5.0, "avg_points": 10.0},   # Pérez
+        2: {"avg_pos": 4.0, "avg_points": 12.0},   # Hamilton
+        3: {"avg_pos": 5.5, "avg_points": 9.0},    # Russell
+        4: {"avg_pos": 3.0, "avg_points": 15.0},   # Leclerc
+        5: {"avg_pos": 4.5, "avg_points": 11.0},   # Sainz
+        6: {"avg_pos": 3.5, "avg_points": 14.0},   # Norris
+        7: {"avg_pos": 6.0, "avg_points": 8.0},    # Piastri
+        8: {"avg_pos": 7.0, "avg_points": 6.0},    # Alonso
+        9: {"avg_pos": 12.0, "avg_points": 2.0},   # Stroll
+        10: {"avg_pos": 10.0, "avg_points": 4.0},  # Gasly
+        11: {"avg_pos": 11.0, "avg_points": 3.0},  # Ocon
+        12: {"avg_pos": 14.0, "avg_points": 1.0},  # Bottas
+        13: {"avg_pos": 16.0, "avg_points": 0.5},  # Zhou
+        14: {"avg_pos": 13.0, "avg_points": 1.5},  # Magnussen
+        15: {"avg_pos": 11.0, "avg_points": 3.0},  # Hülkenberg
+        16: {"avg_pos": 12.0, "avg_points": 2.0},  # Tsunoda
+        17: {"avg_pos": 10.0, "avg_points": 4.0},  # Ricciardo
+        18: {"avg_pos": 15.0, "avg_points": 0.8},  # Albon
+        19: {"avg_pos": 18.0, "avg_points": 0.2},  # Sargeant
+    }
+    
+    # Auto-calculate berdasarkan driver yang dipilih
+    AvgPrevPositions = driver_historical_data[DriverEncoded]["avg_pos"]
+    AvgPrevPoints = driver_historical_data[DriverEncoded]["avg_points"]
     Year = 2025.0
-    TimeDiffFromFastest = st.number_input("Time Gap to Fastest (s)", value=0.5, step=0.1, format="%.1f")
 
 # Feature Engineering
 total_sector_time = Sector1Time + Sector2Time + Sector3Time
@@ -469,6 +493,11 @@ RacePaceEfficiency = RacePace / LapTime
 Sector1Ratio = Sector1Time / total_sector_time
 Sector2Ratio = Sector2Time / total_sector_time
 Sector3Ratio = Sector3Time / total_sector_time
+
+# Auto-calculate TimeDiffFromFastest based on BestQuali
+# Assuming fastest quali time is around 78.0s for Mexico City GP
+fastest_quali_time = 78.0
+TimeDiffFromFastest = max(0, BestQuali - fastest_quali_time)
 
 user_inputs = {
     'Year': Year, 'GridPosition': float(GridPosition), 'LapTime (s)': LapTime,
